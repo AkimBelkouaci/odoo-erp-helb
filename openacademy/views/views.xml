@@ -1,0 +1,113 @@
+
+<odoo>
+    <data>
+
+        <!-- Liste des cours -->
+        <record model="ir.ui.view" id="openacademy.list">
+            <field name="name">openacademy list</field>
+            <field name="model">openacademy.course</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Formulaire des sessions avec boutons -->
+        <record model="ir.ui.view" id="openacademy.session_form">
+            <field name="name">openacademy.session.form</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm"
+                                type="object"
+                                string="Confirmer"/>
+
+                        <button name="action_done"
+                                type="object"
+                                string="Terminer"/>
+
+                        <button name="action_cancel"
+                                type="object"
+                                string="Annuler"/>
+
+                        <button name="action_set_draft"
+                                type="object"
+                                string="Remettre en brouillon"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirm,done,cancel"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Actions ouvrant les vues -->
+        <record model="ir.actions.act_window" id="openacademy.action_window">
+            <field name="name">Courses</field>
+            <field name="res_model">openacademy.course</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="openacademy.action_window_session">
+            <field name="name">Sessions</field>
+            <field name="res_model">openacademy.session</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="openacademy.action_window_contact">
+            <field name="name">Contacts</field>
+            <field name="res_model">openacademy.contact</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Action serveur pour les cours -->
+        <record model="ir.actions.server" id="openacademy.action_server">
+            <field name="name">Courses (server)</field>
+            <field name="model_id" ref="model_openacademy_course"/>
+            <field name="state">code</field>
+            <field name="code">
+action = {
+    "type": "ir.actions.act_window",
+    "view_mode": "list,form",
+    "res_model": model._name,
+}
+            </field>
+        </record>
+
+        <!-- Menu principal -->
+        <menuitem name="Open Academy" id="openacademy.menu_root"/>
+
+        <!-- Catégories -->
+        <menuitem name="Menu 1" id="openacademy.menu_1"
+                  parent="openacademy.menu_root"/>
+        <menuitem name="Menu 2" id="openacademy.menu_2"
+                  parent="openacademy.menu_root"/>
+
+        <!-- Menus -->
+        <menuitem name="Courses" id="openacademy.menu_1_list"
+                  parent="openacademy.menu_1"
+                  action="openacademy.action_window"/>
+
+        <menuitem name="Sessions" id="openacademy.menu_1_session"
+                  parent="openacademy.menu_1"
+                  action="openacademy.action_window_session"/>
+
+        <menuitem name="Contacts" id="openacademy.menu_1_contact"
+                  parent="openacademy.menu_1"
+                  action="openacademy.action_window_contact"/>
+
+        <menuitem name="Server to list" id="openacademy.menu_2_list"
+                  parent="openacademy.menu_2"
+                  action="openacademy.action_server"/>
+
+    </data>
+</odoo>
